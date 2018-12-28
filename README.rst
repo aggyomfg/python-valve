@@ -78,33 +78,33 @@ Obsolete Server (GoldSrc) Query Example
 --------------------
 .. code:: python
 
-import valve.source.a2s
-from valve.source.messages import BrokenMessageError
+    import valve.source.a2s
+    from valve.source.messages import BrokenMessageError
 
-address = "46.174.52.5:27243"
-ip, port = address.split(':')
-server_address = (ip, int(port))
+    address = "46.174.52.5:27243"
+    ip, port = address.split(':')
+    server_address = (ip, int(port))
 
-try:
-    server = valve.source.a2s.ServerQuerier(server_address)
-    info = server.info()
-    print(info["server_name"])
-    print(info["max_players"])
-    print(info["map"])
-    server_playes = valve.source.a2s.ServerQuerier(server_address).players()
-    for player in sorted(server_playes["players"],
-                         key=lambda p: p["score"], reverse=True):
-        print("{score} {name}".format(**player))
-except BrokenMessageError:
-    server = valve.source.a2s.ServerQuerier(server_address)
-    info = server.obsolete_info()
-    print(info["server_name"])
-    print(info["max_players"])
-    print(info["map"])
-    server_playes = valve.source.a2s.ServerQuerier(server_address).players()
-    for player in sorted(server_playes["players"],
-                         key=lambda p: p["score"], reverse=True):
-        print("{score} {name}".format(**player))
+    try:
+        server = valve.source.a2s.ServerQuerier(server_address)
+        info = server.info()
+        print(info["server_name"])
+        print(info["max_players"])
+        print(info["map"])
+        server_playes = valve.source.a2s.ServerQuerier(server_address).players()
+        for player in sorted(server_playes["players"],
+                            key=lambda p: p["score"], reverse=True):
+            print("{score} {name}".format(**player))
+    except BrokenMessageError:
+        server = valve.source.a2s.ServerQuerier(server_address)
+        info = server.obsolete_info()
+        print(info["server_name"])
+        print(info["max_players"])
+        print(info["map"])
+        server_playes = valve.source.a2s.ServerQuerier(server_address).players()
+        for player in sorted(server_playes["players"],
+                            key=lambda p: p["score"], reverse=True):
+            print("{score} {name}".format(**player))
 
 
 Versioning
