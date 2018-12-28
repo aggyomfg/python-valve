@@ -470,6 +470,27 @@ class InfoResponse(Message):
     )
 
 
+class ObsoleteInfoResponse(Message):
+
+    fields = (
+        ByteField("response_type", validators=[lambda x: x == 0x6D]),
+        StringField("server_address"),
+        StringField("server_name"),
+        StringField("map"),
+        StringField("folder"),
+        StringField("game"),
+        ByteField("player_count"),
+        ByteField("max_players"),
+        ByteField("protocol"),
+        ServerTypeField("server_type"),
+        PlatformField("platform"),
+        ByteField("password_protected"),
+        ByteField("mod"),
+        ByteField("vac_enabled"),
+        ByteField("bot_count")
+        # TODO: EDF
+    )
+
 class GetChallengeResponse(Message):
 
     fields = (

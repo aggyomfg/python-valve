@@ -139,6 +139,70 @@ class ServerQuerier(valve.source.BaseQuerier):
         self.request(messages.InfoRequest())
         return messages.InfoResponse.decode(self.get_response())
 
+    def obsolete_info(self):
+        """Retreive information about the obsolete (GoldSrc) server state
+
+        This returns the response from the server which implements
+        ``__getitem__`` for accessing response fields. For example:
+
+        .. code:: python
+
+            with ServerQuerier(...) as server:
+                print(server.info()["server_name"])
+
+        The following fields are available on the response:
+
+        +--------------------+------------------------------------------------+
+        | Field              | Description                                    |
+        +====================+================================================+
+        | response_type      | Always ``0x6D``                                |
+        +--------------------+------------------------------------------------+
+        | server_address     | IP address and port of the server.             |
+        +--------------------+------------------------------------------------+        +--------------------+------------------------------------------------+
+        | server_name        | The name of the server                         |
+        +--------------------+------------------------------------------------+
+        | map                | The name of the map being ran by the server    |
+        +--------------------+------------------------------------------------+
+        | folder             | The *gamedir* if the modification being ran by |
+        |                    | the server. E.g. ``tf``, ``cstrike``, ``csgo``.|
+        +--------------------+------------------------------------------------+
+        | game               | A string identifying the game being ran by the |
+        |                    | server                                         |
+        +--------------------+------------------------------------------------+
+        | mod                | Indicates whether the game is a mod:           |
+        |                    |                 0 for Half-Life                |
+        |                    |                 1 for Half-Life mod            |
+        +--------------------+------------------------------------------------+
+        | player_count       | Number of players currently connected.         |
+        |                    | See :meth:`.players` for caveats about the     |
+        |                    | accuracy of this field.                        |
+        +--------------------+------------------------------------------------+
+        | max_players        | The number of player slots available. Note that|
+        |                    | ``player_count`` may exceed this value under   |
+        |                    | certain circumstances. See :meth:`.players`.   |
+        +--------------------+------------------------------------------------+
+        | bot_count          | The number of AI players present               |
+        +--------------------+------------------------------------------------+
+        | server_type        | A :class:`.util.ServerType` instance           |
+        |                    | representing the type of server. E.g.          |
+        |                    | Dedicated, non-dedicated or Source TV relay.   |
+        +--------------------+------------------------------------------------+
+        | platform           | A :class:`.util.Platform` instances            |
+        |                    | represneting the platform the server is running|
+        |                    | on. E.g. Windows, Linux                        |
+        +--------------------+------------------------------------------------+
+        | password_protected | Whether or not a password is required to       |
+        |                    | connect to the server.                         |
+        +--------------------+------------------------------------------------+
+        | vac_enabled        | Whether or not Valve anti-cheat (VAC) is       |
+        |                    | enabled                                        |
+        +--------------------+------------------------------------------------+
+        Currently the *extra data field* (EDF) is not supported.
+        """
+
+        self.request(messages.InfoRequest())
+        return messages.ObsoleteInfoResponse.decode(self.get_response())
+
     def players(self):
         """Retrive a list of all players connected to the server
 
